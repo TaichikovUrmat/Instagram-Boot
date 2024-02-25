@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .profile-container {
+            max-width: 900px;  <!-- ушул жер 600 болчу -->
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgb(0, 0, 0);
+            margin: 20px auto 0;
+            border-radius: 200px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #fff;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            font-size: 1.2em;
+        }
+
+        .profile-stats div {
+            flex: 1;
+        }
+
+        .profile-stats strong {
+            display: block;
+            font-size: 1.5em;
+        }
+
+        .update-profile-link {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .update-profile-link:hover {
+            text-decoration: underline;
+        }
+
+        .post-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+
+        }
+
+        .card {
+            max-width: 200px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            margin-top: 130px;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-body {
+            padding: 10px;
+            width: 200px;
+
+        }
+
+        .card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+        }
+        .logo{
+            display: flex;
+
+        }
+        .instaProfile{
+            position: absolute;
+            left: 300px;
+            width: 900px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="logo">
+    <!-- Replace the text with your logo image -->
+<div>
+    <ul class="navigation-links">
+        <li><a th:href="@{/userInfo/home}" href="#"><img src="https://img.icons8.com/?size=50&id=2797&format=png" alt="Home" style="height: 40px;"><br>Home</a></li>
+        <li><a th:href="@{/follower/newSearch/{userId}(userId=${user.id})}"><img src="https://image.shutterstock.com/image-vector/search-icon-vector-illustration-on-260nw-416112421.jpg" alt="Search" style="height: 40px;"><br>Search</a></li>
+        <li><a href="#"><img src="https://image.shutterstock.com/image-vector/black-hashtag-icon-260nw-345446816.jpg" alt="Interesting" style="height: 40px;"><br>Interesting</a></li>
+        <li><a href="#"><img src="https://img.icons8.com/?size=50&id=PxI9IPCyBAOD&format=png" alt="Reels" style="height: 40px;"><br>Reels</a></li>
+        <li><a href="#"><img src="https://img.icons8.com/?size=50&id=37966&format=png" alt="Message" style="height: 40px;"><br>Message</a></li>
+        <li><a href="#"><img src="https://image.shutterstock.com/image-vector/notification-icon-vector-material-design-260nw-759841507.jpg" alt="Notifications" style="height: 40px;"><br>Notifications</a></li>
+        <li><a href="#">Profile</a></li>
+    </ul>
+</div>
+
+   <div class="instaProfile">
+       <div class="profile-container">
+           <img class="profile-image" th:src="${userInfo.getImage()}" alt="Profile Image">
+           <h2 th:text="${user.user_name}"></h2>
+
+           <p th:text="${userInfo.getFullName()}"></p>
+           <p th:text="${userInfo.getBiography()}"></p>
+           <p th:text="${userInfo.getGender()}"></p>
+           <p>
+               <a class="update-profile-link" th:href="@{/userInfo/update/{userInfoId}(userInfoId=${userInfo.getId()})}">Update profile</a>
+           </p>
+
+           <div class="profile-stats">
+               <div>
+                   <strong>Posts</strong><br>
+                   <p th:text="${user.posts.size()}"></p>
+               </div>
+               <div>
+                  <!--  Подписчики    -->
+                   <strong>Subscribers </strong><br>
+                   <p th:text="${user.getFollower().getSubscribers().size()}"></p>
+               </div>
+               <div>
+                   <!--  Подписки   -->
+                   <strong>Subscriptions</strong><br>
+                   <p th:text="${user.getFollower().getSubscriptions().size()}"></p>
+
+               </div>
+           </div>
+
+           <p>
+               <!--        <a class="edit-profile-link" th:href="@{/userInfo/update/{userID}(userID=${userInfo.id})}">Update profile</a>-->
+           </p>
+           <p>
+               <a class="edit-profile-link" th:href="@{/post/newPost/{userID}(userID=${userId})}">Create Post</a>
+           </p>
+       </div>
+   </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+<body>
+<div class="post-container">
+
+
+    <div class="card" th:each="postt : ${postInfo}">
+        <div class="card_second" th:each="comments: ${commentInfo}">
+        <div th:each="imag :${postt.getImages()}">
+            <img th:src="${imag.getImageURL()}" class="card-img-top" alt="Post Image">
+<!--            <img th:src="${post.getImages()}" class="card-img-top" alt="Post Image">-->
+
+            <div class="card-body">
+
+                <h5 class="card-title" th:text="${postt.getDescription()}">Post Title</h5>
+                <p class="card-text" th:text="${postt.getTitle()}">Post Description</p>
+                <p class="card-text" th:text="${postt.getCreatedAt()}">Post Date</p>
+
+                <a th:href="@{/comments/newCreateComments/{userId}/{postId}(userId=${user.id},postId=${postt.id})}" class="btn btn-primary"> Comment </a>
+                <a th:href="@{/post/delete/{postID}(postID=${postt.getId()})}" class="btn btn-danger">Delete</a>
+<!--                <a class="nav-link" th:href="@{/comments/newCreateComments/{userId}/{postId}(userId=${user.id},postId=${postt.id})}" > Comment </a>-->
+
+
+                <p class="card-text" th:text="${comments.getUser().user_name}">Comments User</p>
+                <p class="card-text" th:text="${com.comment}">Comment</p>
+<!--                <p class="card-text" th:text="${commentInfo.getCreatedAt()}">Data</p>-->
+            </div>
+                <!-- <a th:href="@{/post/delete/{userID}/{postID}(userID=${userID})(postID=${postID})}" class="btn btn-danger">Delete</a>-->
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</html>
+
+
+
+
+
+
